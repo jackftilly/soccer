@@ -3,7 +3,7 @@ const Util = require('../util/util.js');
 class Ball extends MovingObject {
   constructor(game, team) {
     const RADIUS = 10;
-    const COLOR = '#938832';
+    const COLOR = '938832';
     const POS = [500, 300];
     const VEL = [0, 0];
     const options = {
@@ -22,7 +22,7 @@ class Ball extends MovingObject {
   }
 
   reduceVel() {
-    this.vel = [this.vel[0] / 1.03, this.vel[1] / 1.03];
+    this.vel = [this.vel[0] / 1.1, this.vel[1] / 1.1];
   }
 
   collision(vel) {

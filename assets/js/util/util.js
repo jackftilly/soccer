@@ -39,7 +39,18 @@ const Util = {
         break;
       }
     }
+  },
+  addHexColor(c1, c2) {
+    c1 = c1.split("");
+    c2 = c2.split("");
+    endResult = [];
+    c1.forEach((it, idx) => {
+      let inner = parseInt(it, 16);
+      inner -= parseInt(c2[idx], 16);
+      endResult.push(Math.abs(inner).toString(16));
+    });
+    return endResult.join("");
   }
-};
+}
 
 module.exports = Util;

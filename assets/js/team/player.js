@@ -1,22 +1,34 @@
 const MovingObject = require('../game/moving_object.js');
 class Player extends MovingObject {
   constructor(color, game, p, side) {
-    const RADIUS = 25;
+    const RADIUS = 15;
     const randX = Math.floor(Math.random() * 902.4 + 10);
     const randY = Math.floor(Math.random() * 480 + 10);
 
     let POS;
     if (side) {
-      if (p === 0) {
-        POS = [400, 200];
+      if (p === 2) {
+        POS = [300, 100];
+      } else if (p === 1){
+        POS = [300, 500];
+      } else if (p === 0) {
+        POS = [400, 300];
+      } else if (p === 3) {
+        POS = [200, 300];
       } else {
-        POS = [400, 400];
+        POS = [50, 300];
       }
     } else {
-      if (p === 0) {
-        POS = [600, 200];
+      if (p === 2) {
+        POS = [700, 100];
+      } else if (p === 1){
+        POS = [700, 500];
+      } else if (p === 0) {
+        POS = [600, 300];
+      } else if (p === 3) {
+        POS = [800, 300];
       } else {
-        POS = [600, 400];
+        POS = [950, 300];
       }
     }
     const COLOR = color;
@@ -32,23 +44,23 @@ class Player extends MovingObject {
   }
 
   resetPlayer() {
-    this.pos = this.initPos;
+    this.pos = this.initPos.slice(0, 2);
     this.vel = [0, 0];
   }
 
   changeVel(key) {
     switch(key) {
       case 'up':
-        this.vel[1] -= 6;
+        this.vel[1] -= 1;
         break;
       case 'down':
-        this.vel[1] += 6;
+        this.vel[1] += 1;
         break;
       case 'left':
-        this.vel[0] -= 6;
+        this.vel[0] -= 1;
         break;
       case 'right':
-        this.vel[0] += 6;
+        this.vel[0] += 1;
         break;
     }
   }
@@ -70,7 +82,7 @@ class Player extends MovingObject {
   reduceVel() {
     let x = this.vel[0];
     let y = this.vel[1];
-    this.vel = [x / 1.1, y / 1.1];
+    this.vel = [x / 1.05, y / 1.05];
     if ((Math.abs(this.vel[0]) < 0.5) && (Math.abs(this.vel[1]) < 0.5)) {
       this.vel = [0, 0]
     }

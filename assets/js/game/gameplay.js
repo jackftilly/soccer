@@ -2,13 +2,22 @@ const Team = require('../team/team.js');
 const Ball = require('./ball.js');
 class Game {
   constructor(ctx) {
-    const team1color = '#40E0D0';
-    const team2color = '#93ba5c';
+    const team1color = '40E0D0';
+    const team2color = 'ffffff';
     this.ctx = ctx;
     this.team1 = new Team(this, team1color, true);
     this.team2 = new Team(this, team2color, false)
     this.ball = new Ball(this, this.team1);
     this.players = this.team1.team.concat(this.team2.team);
+    this.updateScoreBoard();
+  }
+
+  updateScoreBoard() {
+    let team1score = document.getElementById('team1score');
+    team1score.innerHTML = this.team1.goals;
+
+    let team2score = document.getElementById('team2score');
+    team2score.innerHTML = this.team2.goals;
   }
 
   draw() {
@@ -66,6 +75,7 @@ class Game {
     } else {
       this.team2.score();
     }
+    this.updateScoreBoard();
   }
 
   step() {
@@ -74,7 +84,7 @@ class Game {
       this.checkCollisions();
       this.draw();
       this.reduceVel();
-    }, 10)
+    }, 20)
   }
 }
 

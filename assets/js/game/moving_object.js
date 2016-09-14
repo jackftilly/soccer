@@ -10,7 +10,7 @@ class MovingObject {
 
   draw(ctx) {
     ctx.beginPath();
-    ctx.fillStyle = this.color;
+    ctx.fillStyle = "#" + this.color;
     ctx.arc(
       this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI
     );
@@ -18,6 +18,7 @@ class MovingObject {
     ctx.closePath();
     Util.sleep(20);
   }
+
 
   move() {
     this.pos[0] += this.vel[0];

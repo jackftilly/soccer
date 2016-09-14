@@ -80,13 +80,22 @@
 	const Ball = __webpack_require__(6);
 	class Game {
 	  constructor(ctx) {
-	    const team1color = '#40E0D0';
-	    const team2color = '#93ba5c';
+	    const team1color = '40E0D0';
+	    const team2color = 'ffffff';
 	    this.ctx = ctx;
 	    this.team1 = new Team(this, team1color, true);
 	    this.team2 = new Team(this, team2color, false)
 	    this.ball = new Ball(this, this.team1);
 	    this.players = this.team1.team.concat(this.team2.team);
+	    this.updateScoreBoard();
+	  }
+	
+	  updateScoreBoard() {
+	    let team1score = document.getElementById('team1score');
+	    team1score.innerHTML = this.team1.goals;
+	
+	    let team2score = document.getElementById('team2score');
+	    team2score.innerHTML = this.team2.goals;
 	  }
 	
 	  draw() {
@@ -144,6 +153,7 @@
 	    } else {
 	      this.team2.score();
 	    }
+	    this.updateScoreBoard();
 	  }
 	
 	  step() {
@@ -152,7 +162,7 @@
 	      this.checkCollisions();
 	      this.draw();
 	      this.reduceVel();
-	    }, 10)
+	    }, 20)
 	  }
 	}
 	
@@ -227,17 +237,24 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const Player = __webpack_require__(3);
+	const Util = __webpack_require__(5);
 	class Team {
 	  constructor(game, color, side) {
 	    const p1 = new Player(color, game, 0, side);
 	    const p2 = new Player(color, game, 1, side);
-	    this.score = 0;
+	    const p3 = new Player(color, game, 2, side);
+	    const p4 = new Player(color, game, 3, side);
+	    const p5 = new Player(color, game, 4, side);
+	    this.goals = 0;
+	    this.color = color;
 	    this.currentPlayer = 0;
-	    this.team = [p1, p2]
+	    this.team = [p1, p2, p3, p4, p5]
+	    this.origColor = color;
+	    this.team[0].color = this.activeColor();
 	  }
 	
 	  score() {
-	    this.score += 1;
+	    this.goals += 1;
 	  }
 	  draw(ctx) {
 	    this.team.forEach(player => {
@@ -246,16 +263,39 @@
 	  }
 	
 	  resetPlayers() {
+	    this.switchPlayers(0);
 	    this.team.forEach(player => {
 	      player.resetPlayer();
 	    })
 	  }
 	
-	  switchPlayers() {
-	    if (this.currentPlayer === 0) {
-	      this.currentPlayer = 1;
+	  switchPlayers(playNum) {
+	    if (playNum !== undefined) {
+	      this.team[this.currentPlayer].color = this.origColor;
+	      this.currentPlayer = playNum;
+	      this.team[0].color = this.activeColor();
 	    } else {
-	      this.currentPlayer = 0;
+	      if (this.currentPlayer === 0) {
+	        this.currentPlayer = 1;
+	        this.team[0].color = this.origColor;
+	        this.team[1].color = this.activeColor();
+	      } else if (this.currentPlayer === 1) {
+	        this.currentPlayer = 2;
+	        this.team[1].color = this.origColor;
+	        this.team[2].color = this.activeColor();
+	      } else if (this.currentPlayer === 2) {
+	        this.currentPlayer = 3;
+	        this.team[2].color = this.origColor;
+	        this.team[3].color = this.activeColor();
+	      } else if (this.currentPlayer === 3) {
+	        this.currentPlayer = 4;
+	        this.team[3].color = this.origColor;
+	        this.team[4].color = this.activeColor();
+	      } else {
+	        this.currentPlayer = 0;
+	        this.team[4].color = this.origColor;
+	        this.team[0].color = this.activeColor();
+	      }
 	    }
 	  }
 	
@@ -263,7 +303,6 @@
 	    let player = this.team[this.currentPlayer];
 	    let x = player.pos[0];
 	    let y = player.pos[1];
-	    console.log(x, y);
 	    let distX = Math.abs(x - 375);
 	    let distY = Math.abs(y - 10);
 	    let dist = Math.sqrt((distX * distX) + (distY * distY));
@@ -274,6 +313,11 @@
 	    } else {
 	      console.log("LAYUP");
 	    }
+	  }
+	
+	  activeColor() {
+	    let color = Util.addHexColor(this.color, 'ffffff');
+	    return color;
 	  }
 	
 	  reduceVel() {
@@ -292,6 +336,9 @@
 	      player.move();
 	    });
 	  }
+	
+	
+	
 	}
 	
 	
@@ -305,22 +352,34 @@
 	const MovingObject = __webpack_require__(4);
 	class Player extends MovingObject {
 	  constructor(color, game, p, side) {
-	    const RADIUS = 25;
+	    const RADIUS = 15;
 	    const randX = Math.floor(Math.random() * 902.4 + 10);
 	    const randY = Math.floor(Math.random() * 480 + 10);
 	
 	    let POS;
 	    if (side) {
-	      if (p === 0) {
-	        POS = [400, 200];
+	      if (p === 2) {
+	        POS = [300, 100];
+	      } else if (p === 1){
+	        POS = [300, 500];
+	      } else if (p === 0) {
+	        POS = [400, 300];
+	      } else if (p === 3) {
+	        POS = [200, 300];
 	      } else {
-	        POS = [400, 400];
+	        POS = [50, 300];
 	      }
 	    } else {
-	      if (p === 0) {
-	        POS = [600, 200];
+	      if (p === 2) {
+	        POS = [700, 100];
+	      } else if (p === 1){
+	        POS = [700, 500];
+	      } else if (p === 0) {
+	        POS = [600, 300];
+	      } else if (p === 3) {
+	        POS = [800, 300];
 	      } else {
-	        POS = [600, 400];
+	        POS = [950, 300];
 	      }
 	    }
 	    const COLOR = color;
@@ -336,23 +395,23 @@
 	  }
 	
 	  resetPlayer() {
-	    this.pos = this.initPos;
+	    this.pos = this.initPos.slice(0, 2);
 	    this.vel = [0, 0];
 	  }
 	
 	  changeVel(key) {
 	    switch(key) {
 	      case 'up':
-	        this.vel[1] -= 6;
+	        this.vel[1] -= 1;
 	        break;
 	      case 'down':
-	        this.vel[1] += 6;
+	        this.vel[1] += 1;
 	        break;
 	      case 'left':
-	        this.vel[0] -= 6;
+	        this.vel[0] -= 1;
 	        break;
 	      case 'right':
-	        this.vel[0] += 6;
+	        this.vel[0] += 1;
 	        break;
 	    }
 	  }
@@ -374,7 +433,7 @@
 	  reduceVel() {
 	    let x = this.vel[0];
 	    let y = this.vel[1];
-	    this.vel = [x / 1.1, y / 1.1];
+	    this.vel = [x / 1.05, y / 1.05];
 	    if ((Math.abs(this.vel[0]) < 0.5) && (Math.abs(this.vel[1]) < 0.5)) {
 	      this.vel = [0, 0]
 	    }
@@ -400,7 +459,7 @@
 	
 	  draw(ctx) {
 	    ctx.beginPath();
-	    ctx.fillStyle = this.color;
+	    ctx.fillStyle = "#" + this.color;
 	    ctx.arc(
 	      this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI
 	    );
@@ -408,6 +467,7 @@
 	    ctx.closePath();
 	    Util.sleep(20);
 	  }
+	
 	
 	  move() {
 	    this.pos[0] += this.vel[0];
@@ -470,8 +530,19 @@
 	        break;
 	      }
 	    }
+	  },
+	  addHexColor(c1, c2) {
+	    c1 = c1.split("");
+	    c2 = c2.split("");
+	    endResult = [];
+	    c1.forEach((it, idx) => {
+	      let inner = parseInt(it, 16);
+	      inner -= parseInt(c2[idx], 16);
+	      endResult.push(Math.abs(inner).toString(16));
+	    });
+	    return endResult.join("");
 	  }
-	};
+	}
 	
 	module.exports = Util;
 
@@ -485,7 +556,7 @@
 	class Ball extends MovingObject {
 	  constructor(game, team) {
 	    const RADIUS = 10;
-	    const COLOR = '#938832';
+	    const COLOR = '938832';
 	    const POS = [500, 300];
 	    const VEL = [0, 0];
 	    const options = {
@@ -504,7 +575,7 @@
 	  }
 	
 	  reduceVel() {
-	    this.vel = [this.vel[0] / 1.03, this.vel[1] / 1.03];
+	    this.vel = [this.vel[0] / 1.1, this.vel[1] / 1.1];
 	  }
 	
 	  collision(vel) {
