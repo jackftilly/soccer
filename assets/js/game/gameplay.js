@@ -2,16 +2,19 @@ const Team = require('../team/team.js');
 const Ball = require('./ball.js');
 class Game {
   constructor(ctx) {
-    const color = '#40E0D0';
+    const team1color = '#40E0D0';
+    const team2color = '#93ba5c';
     this.ctx = ctx;
-    this.team1 = new Team(this, color);
+    this.team1 = new Team(this, team1color, true);
+    this.team2 = new Team(this, team2color, false)
     this.ball = new Ball(this, this.team1);
-    this.players = this.team1.team;
+    this.players = this.team1.team.concat(this.team2.team);
   }
 
   draw() {
     createCourt(this.ctx);
     this.team1.draw(this.ctx);
+    this.team2.draw(this.ctx);
     this.ball.draw(this.ctx);
   }
 
@@ -47,7 +50,7 @@ class Game {
       this.checkCollisions();
       this.draw();
       this.reduceVel();
-    }, 20)
+    }, 10)
   }
 }
 

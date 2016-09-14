@@ -72,16 +72,19 @@
 	const Ball = __webpack_require__(6);
 	class Game {
 	  constructor(ctx) {
-	    const color = '#40E0D0';
+	    const team1color = '#40E0D0';
+	    const team2color = '#93ba5c';
 	    this.ctx = ctx;
-	    this.team1 = new Team(this, color);
+	    this.team1 = new Team(this, team1color, true);
+	    this.team2 = new Team(this, team2color, false)
 	    this.ball = new Ball(this, this.team1);
-	    this.players = this.team1.team;
+	    this.players = this.team1.team.concat(this.team2.team);
 	  }
 	
 	  draw() {
 	    createCourt(this.ctx);
 	    this.team1.draw(this.ctx);
+	    this.team2.draw(this.ctx);
 	    this.ball.draw(this.ctx);
 	  }
 	
@@ -117,7 +120,7 @@
 	      this.checkCollisions();
 	      this.draw();
 	      this.reduceVel();
-	    }, 20)
+	    }, 10)
 	  }
 	}
 	
@@ -192,9 +195,9 @@
 
 	const Player = __webpack_require__(3);
 	class Team {
-	  constructor(game, color) {
-	    const p1 = new Player(color, game, 0);
-	    const p2 = new Player(color, game, 1);
+	  constructor(game, color, side) {
+	    const p1 = new Player(color, game, 0, side);
+	    const p2 = new Player(color, game, 1, side);
 	    this.score = 0;
 	    this.currentPlayer = 0;
 	    this.team = [p1, p2]
@@ -262,15 +265,23 @@
 
 	const MovingObject = __webpack_require__(4);
 	class Player extends MovingObject {
-	  constructor(color, game, p) {
+	  constructor(color, game, p, side) {
 	    const RADIUS = 25;
 	    const randX = Math.floor(Math.random() * 902.4 + 10);
 	    const randY = Math.floor(Math.random() * 480 + 10);
 	    let POS;
-	    if (p === 0) {
-	      POS = [400, 200];
+	    if (side) {
+	      if (p === 0) {
+	        POS = [400, 200];
+	      } else {
+	        POS = [400, 400];
+	      }
 	    } else {
-	      POS = [400, 400];
+	      if (p === 0) {
+	        POS = [600, 200];
+	      } else {
+	        POS = [600, 400];
+	      }
 	    }
 	    const COLOR = color;
 	    const options = {

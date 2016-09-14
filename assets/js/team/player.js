@@ -1,14 +1,22 @@
 const MovingObject = require('../game/moving_object.js');
 class Player extends MovingObject {
-  constructor(color, game, p) {
+  constructor(color, game, p, side) {
     const RADIUS = 25;
     const randX = Math.floor(Math.random() * 902.4 + 10);
     const randY = Math.floor(Math.random() * 480 + 10);
     let POS;
-    if (p === 0) {
-      POS = [400, 200];
+    if (side) {
+      if (p === 0) {
+        POS = [400, 200];
+      } else {
+        POS = [400, 400];
+      }
     } else {
-      POS = [400, 400];
+      if (p === 0) {
+        POS = [600, 200];
+      } else {
+        POS = [600, 400];
+      }
     }
     const COLOR = color;
     const options = {

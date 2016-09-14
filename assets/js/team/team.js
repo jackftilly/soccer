@@ -1,8 +1,8 @@
 const Player = require('./player.js');
 class Team {
-  constructor(game, color) {
-    const p1 = new Player(color, game, 0);
-    const p2 = new Player(color, game, 1);
+  constructor(game, color, side) {
+    const p1 = new Player(color, game, 0, side);
+    const p2 = new Player(color, game, 1, side);
     this.score = 0;
     this.currentPlayer = 0;
     this.team = [p1, p2]
