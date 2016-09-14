@@ -8,12 +8,18 @@ class Team {
     this.team = [p1, p2]
   }
 
-  score(amnt) {
-    this.score += amnt;
+  score() {
+    this.score += 1;
   }
   draw(ctx) {
     this.team.forEach(player => {
       player.draw(ctx);
+    })
+  }
+
+  resetPlayers() {
+    this.team.forEach(player => {
+      player.resetPlayer();
     })
   }
 

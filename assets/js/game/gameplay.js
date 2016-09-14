@@ -18,11 +18,19 @@ class Game {
     this.ball.draw(this.ctx);
   }
 
-  accel(key) {
-    let pos = this.team1.accel(key);
+  accel(teamNum, key) {
+    if (teamNum === 1) {
+      let pos = this.team1.accel(key);
+    } else {
+      let pos = this.team2.accel(key);
+    }
   }
-  switchPlayers() {
-    this.team1.switchPlayers();
+  switchPlayers(team) {
+    if (team === 1) {
+      this.team1.switchPlayers();
+    } else {
+      this.team2.switchPlayers();
+    }
   }
   move() {
     this.players.forEach(player => {
@@ -33,6 +41,7 @@ class Game {
 
   reduceVel() {
     this.team1.reduceVel();
+    this.team2.reduceVel();
     this.ball.reduceVel();
   }
 
@@ -42,6 +51,21 @@ class Game {
         this.ball.collision(player.vel);
       }
     });
+  }
+
+  resetPieces() {
+    this.team1.resetPlayers();
+    this.team2.resetPlayers();
+    this.ball.resetBall();
+  }
+
+  scored(team) {
+    this.resetPieces();
+    if (team === 1) {
+      this.team1.score();
+    } else {
+      this.team2.score();
+    }
   }
 
   step() {
@@ -55,6 +79,7 @@ class Game {
 }
 
 function createCourt(ctx) {
+  ctx.clearRect(0, 0, 1000, 600);
   ctx.beginPath();
 
   ctx.fillStyle = "#00aa00";

@@ -9,10 +9,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initiateKeyBindings(game) {
-  key('left', () => game.accel('left'));
-  key('up', () => game.accel('up'));
-  key('down', () => game.accel('down'));
-  key('right', () => game.accel('right'));
+  key('left', () => game.accel(1, 'left'));
+  key('up', () => game.accel(1, 'up'));
+  key('down', () => game.accel(1, 'down'));
+  key('right', () => game.accel(1, 'right'));
 
-  key('x', () => game.switchPlayers());
+  key('.', () => game.switchPlayers(1));
+
+
+  key('a', () => game.accel(2, 'left'));
+  key('w', () => game.accel(2, 'up'));
+  key('s', () => game.accel(2, 'down'));
+  key('d', () => game.accel(2, 'right'));
+
+  key('t', () => game.switchPlayers(2));
 }

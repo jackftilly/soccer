@@ -4,6 +4,7 @@ class Player extends MovingObject {
     const RADIUS = 25;
     const randX = Math.floor(Math.random() * 902.4 + 10);
     const randY = Math.floor(Math.random() * 480 + 10);
+
     let POS;
     if (side) {
       if (p === 0) {
@@ -27,6 +28,12 @@ class Player extends MovingObject {
       game: game
     };
     super(options);
+    this.initPos = POS.slice(0, 2);
+  }
+
+  resetPlayer() {
+    this.pos = this.initPos;
+    this.vel = [0, 0];
   }
 
   changeVel(key) {

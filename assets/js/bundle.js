@@ -55,12 +55,20 @@
 	});
 	
 	function initiateKeyBindings(game) {
-	  key('left', () => game.accel('left'));
-	  key('up', () => game.accel('up'));
-	  key('down', () => game.accel('down'));
-	  key('right', () => game.accel('right'));
+	  key('left', () => game.accel(1, 'left'));
+	  key('up', () => game.accel(1, 'up'));
+	  key('down', () => game.accel(1, 'down'));
+	  key('right', () => game.accel(1, 'right'));
 	
-	  key('x', () => game.switchPlayers());
+	  key('.', () => game.switchPlayers(1));
+	
+	
+	  key('a', () => game.accel(2, 'left'));
+	  key('w', () => game.accel(2, 'up'));
+	  key('s', () => game.accel(2, 'down'));
+	  key('d', () => game.accel(2, 'right'));
+	
+	  key('t', () => game.switchPlayers(2));
 	}
 
 
@@ -88,11 +96,19 @@
 	    this.ball.draw(this.ctx);
 	  }
 	
-	  accel(key) {
-	    let pos = this.team1.accel(key);
+	  accel(teamNum, key) {
+	    if (teamNum === 1) {
+	      let pos = this.team1.accel(key);
+	    } else {
+	      let pos = this.team2.accel(key);
+	    }
 	  }
-	  switchPlayers() {
-	    this.team1.switchPlayers();
+	  switchPlayers(team) {
+	    if (team === 1) {
+	      this.team1.switchPlayers();
+	    } else {
+	      this.team2.switchPlayers();
+	    }
 	  }
 	  move() {
 	    this.players.forEach(player => {
@@ -103,6 +119,7 @@
 	
 	  reduceVel() {
 	    this.team1.reduceVel();
+	    this.team2.reduceVel();
 	    this.ball.reduceVel();
 	  }
 	
@@ -112,6 +129,21 @@
 	        this.ball.collision(player.vel);
 	      }
 	    });
+	  }
+	
+	  resetPieces() {
+	    this.team1.resetPlayers();
+	    this.team2.resetPlayers();
+	    this.ball.resetBall();
+	  }
+	
+	  scored(team) {
+	    this.resetPieces();
+	    if (team === 1) {
+	      this.team1.score();
+	    } else {
+	      this.team2.score();
+	    }
 	  }
 	
 	  step() {
@@ -125,6 +157,7 @@
 	}
 	
 	function createCourt(ctx) {
+	  ctx.clearRect(0, 0, 1000, 600);
 	  ctx.beginPath();
 	
 	  ctx.fillStyle = "#00aa00";
@@ -203,12 +236,18 @@
 	    this.team = [p1, p2]
 	  }
 	
-	  score(amnt) {
-	    this.score += amnt;
+	  score() {
+	    this.score += 1;
 	  }
 	  draw(ctx) {
 	    this.team.forEach(player => {
 	      player.draw(ctx);
+	    })
+	  }
+	
+	  resetPlayers() {
+	    this.team.forEach(player => {
+	      player.resetPlayer();
 	    })
 	  }
 	
@@ -269,6 +308,7 @@
 	    const RADIUS = 25;
 	    const randX = Math.floor(Math.random() * 902.4 + 10);
 	    const randY = Math.floor(Math.random() * 480 + 10);
+	
 	    let POS;
 	    if (side) {
 	      if (p === 0) {
@@ -292,6 +332,12 @@
 	      game: game
 	    };
 	    super(options);
+	    this.initPos = POS.slice(0, 2);
+	  }
+	
+	  resetPlayer() {
+	    this.pos = this.initPos;
+	    this.vel = [0, 0];
 	  }
 	
 	  changeVel(key) {
@@ -452,6 +498,11 @@
 	    super(options);
 	  }
 	
+	  resetBall() {
+	    this.pos = [500, 300];
+	    this.vel = [0, 0];
+	  }
+	
 	  reduceVel() {
 	    this.vel = [this.vel[0] / 1.03, this.vel[1] / 1.03];
 	  }
@@ -460,6 +511,26 @@
 	    this.vel[0] += vel[0];
 	    this.vel[1] += vel[1];
 	  }
+	  move () {
+	    this.pos[0] += this.vel[0];
+	    this.pos[1] += this.vel[1];
+	    if ((this.pos[0] < 0) || (this.pos[0] > 1000)) {
+	      if ((this.pos[1] > 250) && (this.pos[1] < 350)) {
+	        if (this.pos[0] < 500) {
+	          alert('TEAM 2 SCORED');
+	          this.game.scored(2);
+	        } else {
+	          alert('TEAM 1 SCORED')
+	          this.game.scored(1);
+	        }
+	      } else {
+	        this.vel = [-this.vel[0], this.vel[1]];
+	      }
+	    } else if ((this.pos[1] < 0) || (this.pos[1] > 600)) {
+	      this.vel = [this.vel[0], -this.vel[1]];
+	    }
+	  }
+	
 	}
 	
 	module.exports = Ball;
