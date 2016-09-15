@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SOCCER IN SF</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script type="text/javascript" src="assets/js/soccer/util/keymaster.js"></script>
+    <script type="text/javascript" src="assets/js/soccer/bundle.js"></script>
+  </head>
+  <body>
+
+    <div class="score">
+      <span id="team1score"></span> - <span id="team2score"></span>
+    </div>
+    <span id="time-left"></span>
+    <div id="start">
+      <h1>Welcome to 'Soccer in San Francisco'</h1>
+      <a id="oneLink">One Player vs. CPU</a>
+      <a id="twoLink">Two Player</a>
+      <a id="zeroLink">CPU vs. CPU</a>
+    </div>
+    <h3 id="goal"></h3>
+    <div id="pause">
+      <h1>Game Paused</h1>
+      <h3>Press spacebar to play</h3>
+      <a onClick="showInstructions()">Instructions</a>
+    </div>
+    <div id="game-over">
+      <h1>Game over!</h1>
+      <h1 id="score"><span id="team1score"></span> - <span id="team2score"></span></h3>
+    </div>
+    <canvas id="pitch" width="1000" height="600"> </canvas>
+    <div id="instructions">
+      <h2>instructions</h2>
+      <span onClick="hideInstructions()">X</span>
+      <h4>One Player</h4>
+      <p>arrows: move current player around</p>
+      <p>period: switch to nearest player</p>
+      <p>current player is shown as highlighted red</p>
+      <h4>Player 2</h4>
+      <p>w-a-s-d: move current player around</p>
+      <p>t: switch to nearest player</p>
+      <p>current player is shown as highlighted black</p>
+    </div>
+    <script type="text/javascript">
+      function showInstructions() {
+        document.getElementById('instructions').style.display = 'block'
+      }
+      function hideInstructions() {
+        document.getElementById('instructions').style.display = 'none'
+      }
+    </script>
+  </body>
+</html>

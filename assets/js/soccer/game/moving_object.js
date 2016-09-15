@@ -23,10 +23,20 @@ class MovingObject {
   move() {
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
-    if ((this.pos[0] < 0) || (this.pos[0] > 1000)) {
+    if ((this.pos[0] < 10) || (this.pos[0] > 990)) {
       this.vel = [-this.vel[0], this.vel[1]];
-    } else if ((this.pos[1] < 0) || (this.pos[1] > 600)) {
+      if (this.pos[0] < 300) {
+        this.pos = [10, this.pos[1]];
+      } else {
+        this.pos = [990, this.pos[1]];
+      }
+    } else if ((this.pos[1] < 10) || (this.pos[1] > 590)) {
       this.vel = [this.vel[0], -this.vel[1]];
+      if (this.pos[1] < 300) {
+        this.pos = [this.pos[0], 10];
+      } else {
+        this.pos = [this.pos[0], 590];
+      }
     }
   }
 

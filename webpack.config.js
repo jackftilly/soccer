@@ -1,7 +1,7 @@
 module.exports = {
-  entry: './assets/js/basketball.js',
+  entry: './assets/js/soccer/soccer.js',
   output: {
-    filename: './assets/js/bundle.js'
+    filename: './assets/js/soccer/bundle.js'
   },
   devtool: 'source-map'
 }

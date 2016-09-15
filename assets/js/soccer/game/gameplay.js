@@ -1,15 +1,40 @@
 const Team = require('../team/team.js');
 const Ball = require('./ball.js');
+const AITeam = require('../team/aiTeam.js');
 class Game {
-  constructor(ctx) {
+  constructor(ctx, numPlays, setTime) {
     const team1color = '40E0D0';
     const team2color = 'ffffff';
     this.ctx = ctx;
-    this.team1 = new Team(this, team1color, true);
-    this.team2 = new Team(this, team2color, false)
+    if (numPlays === 1) {
+      this.team1 = new Team(this, team1color, true);
+      this.team2 = new AITeam(this, team2color, false);
+    } else if (numPlays === 2) {
+      this.team1 = new Team(this, team1color, true);
+      this.team2 = new Team(this, team2color, false)
+    } else {
+      this.team1 = new AITeam(this, team1color, true);
+      this.team2 = new AITeam(this, team2color, false);
+    }
     this.ball = new Ball(this, this.team1);
     this.players = this.team1.team.concat(this.team2.team);
     this.updateScoreBoard();
+    this.paused = true;
+    this.timeFromNow();
+  }
+
+  timeFromNow() {
+    this.time = 0;
+    let timerId = setInterval(() => {
+      this.time += 1;
+      if (this.paused) {
+        this.time -= 1;
+      }
+      if (this.time === 180) {
+        clearInterval(timerId);
+      }
+      document.getElementById('time-left').innerHTML = (this.time / 2);
+    }, 1000);
   }
 
   updateScoreBoard() {
@@ -28,10 +53,14 @@ class Game {
   }
 
   accel(teamNum, key) {
-    if (teamNum === 1) {
-      let pos = this.team1.accel(key);
+    if (this.paused) {
+
     } else {
-      let pos = this.team2.accel(key);
+      if (teamNum === 1) {
+        let pos = this.team1.accel(key);
+      } else {
+        let pos = this.team2.accel(key);
+      }
     }
   }
   switchPlayers(team) {
@@ -42,9 +71,8 @@ class Game {
     }
   }
   move() {
-    this.players.forEach(player => {
-      player.move();
-    });
+    this.team1.move(this.ball);
+    this.team2.move(this.ball);
     this.ball.move();
   }
 
@@ -68,7 +96,18 @@ class Game {
     this.ball.resetBall();
   }
 
+  showGoal(team) {
+    let goalCover = document.getElementById('goal');
+    this.paused = true;
+    goalCover.innerHTML = "GOALLLLLL team" + team;
+    goalCover.style.display = 'block';
+    setTimeout(() => {
+      goalCover.style.display = 'none'
+    }, 5000);
+  }
+
   scored(team) {
+    this.showGoal(team);
     this.resetPieces();
     if (team === 1) {
       this.team1.score();
@@ -78,13 +117,48 @@ class Game {
     this.updateScoreBoard();
   }
 
+  pauseGame() {
+    if (this.paused) {
+      document.getElementById('instructions').style.display = 'none'
+      this.paused = false;
+    } else {
+      this.paused = true;
+    }
+    this.step();
+  }
+
+  gameOver() {
+    document.getElementById('game-over').style.display = 'block';
+  }
+
   step() {
-    setInterval(() => {
+    let timerId = setInterval(() => {
+      let dateNow = new Date();
+      if (this.paused) {
+        clearInterval(timerId);
+        this.showPause();
+      } else {
+        this.hidePause();
+      }
+      if (this.time === 180) {
+        clearInterval(timerId);
+        this.gameOver();
+      }
       this.move();
       this.checkCollisions();
       this.draw();
       this.reduceVel();
     }, 20)
+  }
+
+  hidePause() {
+    let pauseCover = document.getElementById('pause');
+    pauseCover.style.display = 'none';
+  }
+
+  showPause() {
+    let pauseCover = document.getElementById('pause');
+    pauseCover.style.display = 'block';
   }
 }
 
