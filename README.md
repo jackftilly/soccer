@@ -6,7 +6,7 @@ Soccer in San Francisco is a pure vanilla JavaScript game written over the span 
 
 Players are drawn as small circles on the page, that move around as keys are pressed. Instructions for this game are featured on the site:
 
-(./assets/img/instructions.png)
+![Alt Text](/assets/img/instructions.png)
 
 ## Game modes
 There are three game modes implemented in Soccer in San Francisco.
