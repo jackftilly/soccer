@@ -89,20 +89,6 @@ class Player extends MovingObject {
     }
   }
 
-  checkCollision(pos) {
-    let playX = this.pos[0];
-    let playY = this.pos[1];
-    let maxX = playX + 15;
-    let minX = playX - 15;
-    let maxY = playY + 15;
-    let minY = playY - 15;
-    if ((pos[0] < minX) || (pos[0] > maxX) || (pos[1] < minY) || (pos[1] > maxY)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   distanceFrom(pos) {
     let x = this.pos[0];
     let y = this.pos[1];
@@ -149,9 +135,7 @@ class Player extends MovingObject {
     let diffY = ballPos[1] - y;
     let diffPos = [diffX, diffY];
     let dist2 = Math.sqrt((diffX * diffX) + (diffY * diffY));
-    if (dist > 50) {
-      
-    }
+
     diffPos[0] /= dist2;
     diffPos[1] /= dist2;
     this.aiChangeVel(diffPos);

@@ -6,9 +6,8 @@ class Team {
     const p1 = new Player(color, game, 0, side);
     const p2 = new Player(color, game, 1, side);
     const p3 = new Player(color, game, 2, side);
-    const p4 = new Player(color, game, 3, side);
+    const p4= new Player(color, game, 3, side);
     const p5 = new Keeper(color, game, 4, side);
-
     this.goals = 0;
     this.color = color;
     this.currentPlayer = 0;

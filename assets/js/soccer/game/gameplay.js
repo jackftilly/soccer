@@ -30,10 +30,10 @@ class Game {
       if (this.paused) {
         this.time -= 1;
       }
-      if (this.time === 180) {
+      if (this.time === 360) {
         clearInterval(timerId);
       }
-      document.getElementById('time-left').innerHTML = (this.time / 2);
+      document.getElementById('time-left').innerHTML = (this.time / 4);
     }, 1000);
   }
 
@@ -83,11 +83,7 @@ class Game {
   }
 
   checkCollisions() {
-    this.players.forEach(player => {
-      if (player.checkCollision(this.ball.pos)) {
-        this.ball.collision(player.vel);
-      }
-    });
+    this.ball.checkCollision(this.players);
   }
 
   resetPieces() {
@@ -140,7 +136,7 @@ class Game {
       } else {
         this.hidePause();
       }
-      if (this.time === 180) {
+      if (this.time === 360) {
         clearInterval(timerId);
         this.gameOver();
       }

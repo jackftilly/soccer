@@ -25,6 +25,16 @@ class Ball extends MovingObject {
     this.vel = [this.vel[0] / 1.2, this.vel[1] / 1.2];
   }
 
+  checkCollision(players) {
+    players.forEach(player => {
+      let range = [[player.pos[0] - 15, player.pos[0] + 15], [player.pos[1] - 15, player.pos[1] + 15]];
+      if ((this.pos[0] > range[0][1]) || (this.pos[0] < range[0][0]) || (this.pos[1] > range[1][1]) || (this.pos[1] < range[1][0])) {
+      } else {
+        this.collision(player.vel);
+      }
+    })
+  }
+
   collision(vel) {
     let velMag = Math.sqrt((vel[0] * vel[0]) + (vel[1] * vel[1]));
     this.vel[0] = vel[0] * velMag / 2;

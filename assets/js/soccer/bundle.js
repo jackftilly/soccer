@@ -133,10 +133,10 @@
 	      if (this.paused) {
 	        this.time -= 1;
 	      }
-	      if (this.time === 180) {
+	      if (this.time === 360) {
 	        clearInterval(timerId);
 	      }
-	      document.getElementById('time-left').innerHTML = (this.time / 2);
+	      document.getElementById('time-left').innerHTML = (this.time / 4);
 	    }, 1000);
 	  }
 	
@@ -186,11 +186,7 @@
 	  }
 	
 	  checkCollisions() {
-	    this.players.forEach(player => {
-	      if (player.checkCollision(this.ball.pos)) {
-	        this.ball.collision(player.vel);
-	      }
-	    });
+	    this.ball.checkCollision(this.players);
 	  }
 	
 	  resetPieces() {
@@ -243,7 +239,7 @@
 	      } else {
 	        this.hidePause();
 	      }
-	      if (this.time === 180) {
+	      if (this.time === 360) {
 	        clearInterval(timerId);
 	        this.gameOver();
 	      }
@@ -343,9 +339,8 @@
 	    const p1 = new Player(color, game, 0, side);
 	    const p2 = new Player(color, game, 1, side);
 	    const p3 = new Player(color, game, 2, side);
-	    const p4 = new Player(color, game, 3, side);
+	    const p4= new Player(color, game, 3, side);
 	    const p5 = new Keeper(color, game, 4, side);
-	
 	    this.goals = 0;
 	    this.color = color;
 	    this.currentPlayer = 0;
@@ -537,20 +532,6 @@
 	    }
 	  }
 	
-	  checkCollision(pos) {
-	    let playX = this.pos[0];
-	    let playY = this.pos[1];
-	    let maxX = playX + 15;
-	    let minX = playX - 15;
-	    let maxY = playY + 15;
-	    let minY = playY - 15;
-	    if ((pos[0] < minX) || (pos[0] > maxX) || (pos[1] < minY) || (pos[1] > maxY)) {
-	      return false;
-	    } else {
-	      return true;
-	    }
-	  }
-	
 	  distanceFrom(pos) {
 	    let x = this.pos[0];
 	    let y = this.pos[1];
@@ -598,7 +579,7 @@
 	    let diffPos = [diffX, diffY];
 	    let dist2 = Math.sqrt((diffX * diffX) + (diffY * diffY));
 	    if (dist > 50) {
-	      
+	
 	    }
 	    diffPos[0] /= dist2;
 	    diffPos[1] /= dist2;
@@ -811,6 +792,16 @@
 	
 	  reduceVel() {
 	    this.vel = [this.vel[0] / 1.2, this.vel[1] / 1.2];
+	  }
+	
+	  checkCollision(players) {
+	    players.forEach(player => {
+	      let range = [[player.pos[0] - 15, player.pos[0] + 15], [player.pos[1] - 15, player.pos[1] + 15]];
+	      if ((this.pos[0] > range[0][1]) || (this.pos[0] < range[0][0]) || (this.pos[1] > range[1][1]) || (this.pos[1] < range[1][0])) {
+	      } else {
+	        this.collision(player.vel);
+	      }
+	    })
 	  }
 	
 	  collision(vel) {
